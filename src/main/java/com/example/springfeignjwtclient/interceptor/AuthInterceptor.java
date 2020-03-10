@@ -33,11 +33,13 @@ public class AuthInterceptor implements RequestInterceptor {
 		String path = template.path();
 		log.debug("Request path: " + path);
 
-		if (!path.contains("authenticate") && null != expirationTime && LocalDateTime.now().isAfter(expirationTime)) {
+		if (!path.contains("authenticate") && ((null != expirationTime && LocalDateTime.now().isAfter(expirationTime))
+				|| expirationTime == null)) {
 			log.info("Token expired. Regenerating token");
 			// Regenerate Token
 			productService.refreshJWTTokent(authenticaionPayload);
 		}
+
 
 		String token = jwtToken.getToken();
 
